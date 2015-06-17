@@ -14,16 +14,17 @@
 (defn rank [card]
   (get card 1))
 
-(defn make-comparator [order]
-  (fn [v1 v2]
-    (- (.indexOf order v1)
-       (.indexOf order v2))))
+(defn make-comparator [prop order]
+  (let [get-pos #(.indexOf order (prop %))]
+    (fn [c1 c2]
+      (- (get-pos c1)
+         (get-pos c2)))))
 
-(defn compare-suits [c1 c2]
-  ((make-comparator suits) (suit c1) (suit c2)))
+(def compare-suits
+  (make-comparator suit suits))
 
-(defn compare-ranks [c1 c2]
-  ((make-comparator ranks) (rank c1) (rank c2)))
+(def compare-ranks
+  (make-comparator rank ranks))
 
 (defn play-round [c1 c2]
   (let [rank-diff (compare-ranks c1 c2)
