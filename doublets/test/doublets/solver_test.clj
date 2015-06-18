@@ -1,5 +1,6 @@
 (ns doublets.solver-test
   (:require [clojure.test :refer :all]
+            [clojure.set]
             [doublets.solver :refer :all]))
 
 (deftest solver-test
