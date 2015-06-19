@@ -7,24 +7,15 @@
                (slurp)
                (read-string)))
 
-(defn replace-char [word index c]
-  (let [get-char #(cond (= index %1) c :else %2)]
-    (apply str (map-indexed get-char word))))
+(defn diff-chars [word1 word2]
+  (count (filter identity (map not= word1 word2))))
 
-(defn char-range [start end]
-  (map char (range (int start) (inc (int end)))))
-
-(def alphabet (char-range \a \z))
-
-(defn mutations [word]
-  (set
-   (for [i (range (count word))
-         c alphabet]
-     (replace-char word i c))))
+(defn neighbor? [word1 word2]
+  (if (= (count word1) (count word2))
+    (= 1 (diff-chars word1 word2))))
 
 (defn neighbors [word]
-  (let [muts (disj (mutations word) word)]
-    (set (filter #(some #{%} words) muts))))
+  (set (filter (partial neighbor? word) words)))
 
 (defn search [goal cur seen path]
   (cond (= goal cur) path
