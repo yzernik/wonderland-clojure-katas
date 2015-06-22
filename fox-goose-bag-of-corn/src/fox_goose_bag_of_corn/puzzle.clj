@@ -47,9 +47,9 @@
   (for [i (range 3)
         j (connections i)
         movers (candidates-to-move (locations i))]
-    (let [new-from (clojure.set/difference (locations i) movers)
-          new-to (clojure.set/union (locations j) movers)]
-      (assoc locations i new-from j new-to))))
+    (assoc locations
+           i (clojure.set/difference (locations i) movers)
+           j (clojure.set/union (locations j) movers))))
 
 (defn safe-neighbors [pos]
   (set (filter pos-safe? (neighbors pos))))
