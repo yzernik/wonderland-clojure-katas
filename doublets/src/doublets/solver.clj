@@ -18,15 +18,13 @@
   (set (filter (partial neighbor? word) words)))
 
 (defn search [goal cur seen path]
-  (cond (= goal cur) path
-        :else (let [options (clojure.set/difference (neighbors cur) seen)]
-                (cond (and (empty? options) (empty? path))
-                      nil
-                      (empty? options)
-                      (recur goal (first path) seen (rest path))
-                      :else
-                      (let [choice (first options)]
-                        (recur goal choice (conj seen choice) (conj path cur)))))))
+  (if (= goal cur) path
+      (let [options (clojure.set/difference (neighbors cur) seen)]
+        (if (not (and (empty? options) (empty? path)))
+          (if (empty? options)
+            (recur goal (first path) seen (rest path))
+            (let [choice (first options)]
+              (recur goal choice (conj seen choice) (conj path cur))))))))
 
 (defn doublets [word1 word2]
   (let [res (search word2 word1 #{word1} nil)]
